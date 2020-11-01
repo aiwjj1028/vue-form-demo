@@ -1,32 +1,53 @@
 <template>
   <div id="app">
-    <div id="nav">
-      <router-link to="/">Home</router-link> |
-      <router-link to="/about">About</router-link>
-    </div>
-    <router-view/>
+    <h1>{{ title }}</h1>
+    <ul>
+      <li v-for="(item,index) in carList" :key="item.index">
+        <h2>{{ item.title }}</h2>
+        <p>{{ item.price }}</p>
+        <button @click="addCart(index)">添加购物车</button>
+      </li>
+    </ul>
+    <my-cart :title="title"></my-cart>
+    <FormElement></FormElement>
   </div>
 </template>
-
+<script>
+import myCart from "./components/Cart";
+import FormElement from "./components/FormElement";
+export default {
+  name: "app",
+  components: {
+    myCart,
+    FormElement
+  },
+  data() {
+    return {
+      carList: [],
+      title: "购物车"
+    }
+  },
+  methods: {
+    addCart(index) {
+      const good = this.carList[index]
+      this.$bus.$emit('addCart',good)
+    }
+  },
+  async created() {
+    // this.$http.get('/api/cartList').then(res=>{
+    //   console.log(res)
+    //   this.carList = res.data.datd
+    // }).catch(err=>{
+    //   console.log('error')
+    // })
+    try {
+      const res = await this.$http.get("/api/cartList");
+      this.carList = res.data.datd;
+    } catch (error) {
+      console.log(error);
+    }
+  }
+};
+</script>
 <style>
-#app {
-  font-family: Avenir, Helvetica, Arial, sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  text-align: center;
-  color: #2c3e50;
-}
-
-#nav {
-  padding: 30px;
-}
-
-#nav a {
-  font-weight: bold;
-  color: #2c3e50;
-}
-
-#nav a.router-link-exact-active {
-  color: #42b983;
-}
 </style>
