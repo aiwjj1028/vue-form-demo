@@ -5,7 +5,7 @@
       <li v-for="(item,index) in carList" :key="item.index">
         <h2>{{ item.title }}</h2>
         <p>{{ item.price }}</p>
-        <button @click="addCart(index)">添加购物车</button>
+        <button @click="addCart(index)">添加购物车我修改了东西</button>
       </li>
     </ul>
     <my-cart :title="title"></my-cart>
